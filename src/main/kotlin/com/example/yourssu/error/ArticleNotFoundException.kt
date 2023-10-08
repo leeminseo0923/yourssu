@@ -1,4 +1,4 @@
-package com.example.yourssu.article
+package com.example.yourssu.error
 
 import com.example.yourssu.error.NotFoundException
 

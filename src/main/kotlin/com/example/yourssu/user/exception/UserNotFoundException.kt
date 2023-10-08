@@ -1,4 +1,4 @@
-package com.example.yourssu.user
+package com.example.yourssu.user.exception
 
 import com.example.yourssu.error.NotFoundException
 

@@ -1,9 +1,11 @@
 package com.example.yourssu.comment
 
+import com.example.yourssu.JwtProvider
 import com.example.yourssu.article.ArticleService
-import com.example.yourssu.article.PermissionDeniedError
-import com.example.yourssu.user.User
-import com.example.yourssu.user.UserService
+import com.example.yourssu.error.CommentNotFoundException
+import com.example.yourssu.error.PermissionDeniedError
+import com.example.yourssu.user.domain.User
+import com.example.yourssu.user.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -14,10 +16,9 @@ class CommentService @Autowired constructor(
     private val userService: UserService
 ) {
 
-    fun createComment(comment: Comment, userEmail: String, userPassword: String, articleId: Long): Comment {
-        val user: User = userService.getUser(userEmail)
-        userService.validateUser(user, userPassword)
-
+    fun createComment(comment: Comment, email: String, userPassword: String, articleId: Long): Comment {
+        val user: User = userService.getUser(email)
+        userService.validateUser(email, userPassword)
         val article = articleService.getArticleById(articleId)
         comment.article = article
         comment.user = user
@@ -27,15 +28,15 @@ class CommentService @Autowired constructor(
 
     fun modifyComment(
         comment: Comment,
-        userEmail: String,
+        email: String,
         userPassword: String,
         articleId: Long,
         commentId: Long
     ): Comment {
 
         commentRepository.findById(commentId).ifPresentOrElse({
-            val user: User = userService.getUser(userEmail)
-            userService.validateUser(user, userPassword)
+            val user: User = userService.getUser(email)
+            userService.validateUser(email, userPassword)
 
             if (it.user != user) {
                 throw PermissionDeniedError()
@@ -52,12 +53,12 @@ class CommentService @Autowired constructor(
     }
 
 
-    fun deleteComment(articleId: Long, commentId: Long, userEmail: String, userPassword: String) {
+    fun deleteComment(articleId: Long, commentId: Long, email: String, userPassword: String) {
         commentRepository.findById(commentId).ifPresent {
-            val user = userService.getUser(userEmail)
+            val user = userService.getUser(email)
             if(user != it.user) throw PermissionDeniedError()
 
-            userService.validateUser(user, userPassword)
+            userService.validateUser(email, userPassword)
 
             if (articleId == it.article.articleId)
                 commentRepository.deleteById(commentId)

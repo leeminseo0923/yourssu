@@ -1,5 +1,6 @@
-package com.example.yourssu.user
+package com.example.yourssu.user.repository
 
+import com.example.yourssu.user.domain.User
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 
