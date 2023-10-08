@@ -1,6 +1,6 @@
 package com.example.yourssu.article
 
-import com.example.yourssu.user.User
+import com.example.yourssu.user.domain.User
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface ArticleRepository : JpaRepository<Article, Long> {

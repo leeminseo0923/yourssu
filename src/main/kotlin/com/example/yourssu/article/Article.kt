@@ -1,6 +1,6 @@
 package com.example.yourssu.article
 
-import com.example.yourssu.user.User
+import com.example.yourssu.user.domain.User
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener

@@ -1,12 +1,10 @@
 package com.example.yourssu.error
 
-import com.example.yourssu.article.PermissionDeniedError
-import com.example.yourssu.user.WrongPasswordException
+import com.example.yourssu.user.exception.WrongPasswordException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
-import org.springframework.web.bind.annotation.ResponseStatus
 
 @ControllerAdvice
 class ExceptionHandler {

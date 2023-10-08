@@ -1,17 +1,19 @@
 package com.example.yourssu.article
 
 import com.example.yourssu.comment.CommentRepository
-import com.example.yourssu.user.User
-import com.example.yourssu.user.UserNotFoundException
-import com.example.yourssu.user.UserRepository
-import com.example.yourssu.user.WrongPasswordException
+import com.example.yourssu.error.ArticleNotFoundException
+import com.example.yourssu.error.PermissionDeniedError
+import com.example.yourssu.user.domain.User
+import com.example.yourssu.user.exception.UserNotFoundException
+import com.example.yourssu.user.repository.UserRepository
+import com.example.yourssu.user.exception.WrongPasswordException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
 @Service
-class ArticleService @Autowired constructor(
+class ArticleService (
     private val articleRepository: ArticleRepository,
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder,
@@ -21,7 +23,6 @@ class ArticleService @Autowired constructor(
     fun createArticle(article: Article, userEmail: String, userPassword: String): Article {
         userRepository.findByEmail(userEmail).ifPresentOrElse({
             if (!passwordEncoder.matches(userPassword, it.password)) throw WrongPasswordException()
-
             article.user = it
         }, {
             throw UserNotFoundException()

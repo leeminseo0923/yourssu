@@ -1,10 +1,9 @@
 package com.example.yourssu.comment
 
 import com.example.yourssu.article.Article
-import com.example.yourssu.user.User
+import com.example.yourssu.user.domain.User
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
-import java.util.Optional
 
 @Repository
 interface CommentRepository: JpaRepository<Comment, Long> {
