@@ -1,5 +1,6 @@
-package com.example.yourssu.user
+package com.example.yourssu.user.domain
 
+import com.example.yourssu.user.UserRole
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
@@ -29,6 +30,13 @@ class User() {
 
     @Column
     var username: String = ""
+
+    @Column
+    @Enumerated(value = EnumType.STRING)
+    var role: UserRole = UserRole.USER
+
+    @Column
+    var refreshToken: String = ""
 
     constructor(email: String, password: String, username: String) : this() {
         this.email = email
