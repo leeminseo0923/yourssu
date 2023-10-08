@@ -1,5 +1,10 @@
 package com.example.yourssu.user
 
+import com.example.yourssu.user.domain.User
+import com.example.yourssu.user.exception.UserNotFoundException
+import com.example.yourssu.user.exception.WrongPasswordException
+import com.example.yourssu.user.repository.UserRepository
+import com.example.yourssu.user.service.UserService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -90,7 +95,7 @@ class UserServiceTest {
         val user = User("temp@abc.com", password, "홍길동Ab")
         user.password = passwordEncoder.encode(password)
         //when
-        userService.validateUser(user, password)
+        userService.validateUser(user.email, password)
         //then
     }
 
@@ -103,7 +108,7 @@ class UserServiceTest {
         userService.createUser(user)
         //when
         val assertThrows = assertThrows<WrongPasswordException> {
-            userService.validateUser(user, password2)
+            userService.validateUser(user.email, password2)
         }
         //then
         assertThat(assertThrows.message)
