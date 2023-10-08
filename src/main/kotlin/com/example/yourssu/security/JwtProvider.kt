@@ -1,4 +1,4 @@
-package com.example.yourssu
+package com.example.yourssu.security
 
 import com.example.yourssu.user.UserRole
 import io.jsonwebtoken.Jwts

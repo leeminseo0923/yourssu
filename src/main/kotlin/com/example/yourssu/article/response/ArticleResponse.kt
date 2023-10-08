@@ -1,6 +1,8 @@
-package com.example.yourssu.article
+package com.example.yourssu.article.response
 
-data class ArticleOTD(
+import com.example.yourssu.article.domain.Article
+
+data class ArticleResponse(
     val articleId: Long,
     val email: String,
     val title: String,

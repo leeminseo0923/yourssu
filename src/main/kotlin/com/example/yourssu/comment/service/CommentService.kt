@@ -1,8 +1,9 @@
-package com.example.yourssu.comment
+package com.example.yourssu.comment.service
 
-import com.example.yourssu.JwtProvider
-import com.example.yourssu.article.ArticleService
-import com.example.yourssu.error.CommentNotFoundException
+import com.example.yourssu.article.service.ArticleService
+import com.example.yourssu.comment.repository.CommentRepository
+import com.example.yourssu.comment.domain.Comment
+import com.example.yourssu.comment.exception.CommentNotFoundException
 import com.example.yourssu.error.PermissionDeniedError
 import com.example.yourssu.user.domain.User
 import com.example.yourssu.user.service.UserService

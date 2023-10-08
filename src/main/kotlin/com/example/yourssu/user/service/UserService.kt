@@ -1,8 +1,8 @@
 package com.example.yourssu.user.service
 
-import com.example.yourssu.JwtProvider
-import com.example.yourssu.article.ArticleService
-import com.example.yourssu.comment.CommentRepository
+import com.example.yourssu.security.JwtProvider
+import com.example.yourssu.article.service.ArticleService
+import com.example.yourssu.comment.repository.CommentRepository
 import com.example.yourssu.user.domain.User
 import com.example.yourssu.user.exception.UserNotFoundException
 import com.example.yourssu.user.exception.WrongPasswordException

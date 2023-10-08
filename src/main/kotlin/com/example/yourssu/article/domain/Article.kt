@@ -1,4 +1,4 @@
-package com.example.yourssu.article
+package com.example.yourssu.article.domain
 
 import com.example.yourssu.user.domain.User
 import org.springframework.data.annotation.CreatedDate

@@ -1,4 +1,6 @@
-package com.example.yourssu.comment
+package com.example.yourssu.comment.dto
+
+import com.example.yourssu.comment.domain.Comment
 
 data class CommentDTO(
     val email: String,

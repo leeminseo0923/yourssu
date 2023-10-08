@@ -1,12 +1,16 @@
 package com.example.yourssu.comment
 
-import com.example.yourssu.article.Article
-import com.example.yourssu.article.ArticleNotFoundException
-import com.example.yourssu.article.ArticleRepository
-import com.example.yourssu.user.User
-import com.example.yourssu.user.UserNotFoundException
-import com.example.yourssu.user.UserRepository
-import com.example.yourssu.user.WrongPasswordException
+import com.example.yourssu.article.domain.Article
+import com.example.yourssu.article.exception.ArticleNotFoundException
+import com.example.yourssu.article.repository.ArticleRepository
+import com.example.yourssu.comment.domain.Comment
+import com.example.yourssu.comment.repository.CommentRepository
+import com.example.yourssu.comment.service.CommentService
+import com.example.yourssu.comment.exception.CommentNotFoundException
+import com.example.yourssu.user.domain.User
+import com.example.yourssu.user.exception.UserNotFoundException
+import com.example.yourssu.user.repository.UserRepository
+import com.example.yourssu.user.exception.WrongPasswordException
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows

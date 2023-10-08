@@ -1,12 +1,9 @@
-package com.example.yourssu
+package com.example.yourssu.security
 
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.filter.GenericFilterBean
 import org.springframework.web.filter.OncePerRequestFilter
 import javax.servlet.FilterChain
-import javax.servlet.ServletRequest
-import javax.servlet.ServletResponse
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 

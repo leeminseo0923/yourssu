@@ -1,6 +1,8 @@
-package com.example.yourssu.comment
+package com.example.yourssu.comment.response
 
-data class CommentOTD (
+import com.example.yourssu.comment.domain.Comment
+
+data class CommentResponse (
     val commentId: Long,
     val email: String,
     val content: String

@@ -1,6 +1,6 @@
-package com.example.yourssu.comment
+package com.example.yourssu.comment.domain
 
-import com.example.yourssu.article.Article
+import com.example.yourssu.article.domain.Article
 import com.example.yourssu.user.domain.User
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate

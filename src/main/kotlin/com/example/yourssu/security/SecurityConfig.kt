@@ -1,4 +1,4 @@
-package com.example.yourssu
+package com.example.yourssu.security
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

@@ -1,4 +1,6 @@
-package com.example.yourssu.article
+package com.example.yourssu.article.dto
+
+import com.example.yourssu.article.domain.Article
 
 data class ArticleDTO(
     val email: String,

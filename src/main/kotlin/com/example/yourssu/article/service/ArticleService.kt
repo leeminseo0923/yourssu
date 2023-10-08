@@ -1,13 +1,14 @@
-package com.example.yourssu.article
+package com.example.yourssu.article.service
 
-import com.example.yourssu.comment.CommentRepository
-import com.example.yourssu.error.ArticleNotFoundException
+import com.example.yourssu.article.domain.Article
+import com.example.yourssu.comment.repository.CommentRepository
+import com.example.yourssu.article.exception.ArticleNotFoundException
+import com.example.yourssu.article.repository.ArticleRepository
 import com.example.yourssu.error.PermissionDeniedError
 import com.example.yourssu.user.domain.User
 import com.example.yourssu.user.exception.UserNotFoundException
 import com.example.yourssu.user.repository.UserRepository
 import com.example.yourssu.user.exception.WrongPasswordException
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import javax.transaction.Transactional

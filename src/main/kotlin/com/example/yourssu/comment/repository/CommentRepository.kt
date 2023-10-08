@@ -1,6 +1,7 @@
-package com.example.yourssu.comment
+package com.example.yourssu.comment.repository
 
-import com.example.yourssu.article.Article
+import com.example.yourssu.article.domain.Article
+import com.example.yourssu.comment.domain.Comment
 import com.example.yourssu.user.domain.User
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository

@@ -1,4 +1,4 @@
-package com.example.yourssu
+package com.example.yourssu.security
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
