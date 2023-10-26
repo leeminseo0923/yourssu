@@ -4,7 +4,6 @@ import com.example.yourssu.article.domain.Article
 
 data class ArticleDTO(
     val email: String,
-    val password: String,
     val title: String,
     val content: String
 ) {
