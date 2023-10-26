@@ -45,9 +45,8 @@ class JwtProvider (
     fun getAccount(token: String): String {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).body.subject
     }
-    fun resolveToken(request: HttpServletRequest): String {
-        println("request = ${request.getHeader("Authorization")}")
-        return request.getHeader("Authorization")
+    fun resolveToken(request: HttpServletRequest): String? {
+        return request.getHeader("Authorization")?.substring(7)
     }
 
     fun validateToken(token: String): Boolean {

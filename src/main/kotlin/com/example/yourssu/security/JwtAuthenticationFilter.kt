@@ -28,9 +28,10 @@ class JwtAuthenticationFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        val token: String = jwtProvider.resolveToken(request)
+        val token: String? = jwtProvider.resolveToken(request)
 
-        if (jwtProvider.validateToken(token)) {
+
+        if (token?.let { jwtProvider.validateToken(it) } == true) {
             val authentication = jwtProvider.getAuthentication(token.split(" ")[1].trim())
             SecurityContextHolder.getContext().authentication = authentication
         }
