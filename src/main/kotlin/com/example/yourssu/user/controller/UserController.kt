@@ -1,5 +1,7 @@
 package com.example.yourssu.user.controller
 
+import com.example.yourssu.security.Auth
+import com.example.yourssu.security.AuthInfo
 import com.example.yourssu.user.domain.User
 import com.example.yourssu.user.dto.LoginDTO
 import com.example.yourssu.user.service.UserService
@@ -29,8 +31,8 @@ class UserController @Autowired constructor(private val userService: UserService
      * curl -X DELETE http://localhost:8080/user -H "Content-Type: application/json" -d '{"email": "email1@urssu.com", "password": "password1"}'
      */
     @DeleteMapping("/user")
-    fun delete(@RequestBody user: LoginDTO) {
-        userService.deleteUser(user.email, user.password)
+    fun delete(@RequestBody user: LoginDTO, @Auth authInfo: AuthInfo) {
+        userService.deleteUser(authInfo.email, user.password)
     }
 
     /**

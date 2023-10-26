@@ -4,7 +4,6 @@ import com.example.yourssu.comment.domain.Comment
 
 data class CommentDTO(
     val email: String,
-    val password: String,
     val content: String
 ) {
     fun createEntity(): Comment {

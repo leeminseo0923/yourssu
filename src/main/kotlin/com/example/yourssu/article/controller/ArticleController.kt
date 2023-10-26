@@ -3,7 +3,8 @@ package com.example.yourssu.article.controller
 import com.example.yourssu.article.dto.ArticleDTO
 import com.example.yourssu.article.response.ArticleResponse
 import com.example.yourssu.article.service.ArticleService
-import com.example.yourssu.user.dto.LoginDTO
+import com.example.yourssu.security.Auth
+import com.example.yourssu.security.AuthInfo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
@@ -12,15 +13,14 @@ class ArticleController @Autowired constructor(private val articleService: Artic
 
     /**
      * curl test
-     * curl -X POST http://localhost:8080/article -H "Content-Type: application/json" -H "Authorization: " -d '{"email": "email@urssu.com", "password": "password1", "title": "title", "content": "content"}'
+     * curl -X POST http://localhost:8080/article -H "Content-Type: application/json" -H "Authorization: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWFpbDFAdXJzc3UuY29tIiwicm9sZXMiOiJVU0VSIiwiaWF0IjoxNjk4MzE4NDAwLCJleHAiOjE2OTgzMjIwMDB9.bpBS_GZDTdwGdPWKtfo4qvFMEX58dZf42TRzHQkNQPc" -d '{"email": "email@urssu.com", "password": "password1", "title": "title", "content": "content"}'
      */
     @PostMapping("/article")
-    fun create(@RequestBody articleDTO: ArticleDTO): ArticleResponse {
+    fun create(@RequestBody articleDTO: ArticleDTO, @Auth authInfo: AuthInfo): ArticleResponse {
         return ArticleResponse(
             articleService.createArticle(
                 articleDTO.createEntity(),
-                articleDTO.email,
-                articleDTO.password,
+                authInfo.email,
             )
         )
     }
@@ -31,16 +31,16 @@ class ArticleController @Autowired constructor(private val articleService: Artic
      * curl -X PUT http://localhost:8080/article/1 -H "Content-Type: application/json" -H "Authorization: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWFpbDFAdXJzc3UuY29tIiwicm9sZXMiOiJVU0VSIiwiaWF0IjoxNjk2NzcyOTc2LCJleHAiOjE2OTY3NzQ3NzZ9.vzJ1qASStlnZC1_jBTx22Whu86iUoDDbZ1P-1fSZDtw" -d '{"email": "email@urssu.com", "password": "password", "title": "title", "content": "content1"}'
      */
     @PutMapping("/article/{id}")
-    fun modify(@PathVariable id: Long, @RequestBody articleDTO: ArticleDTO): ArticleResponse {
-        return ArticleResponse(articleService.modifyArticle(articleDTO.createEntity(), articleDTO.email, articleDTO.password, id))
+    fun modify(@PathVariable id: Long, @RequestBody articleDTO: ArticleDTO, @Auth authInfo: AuthInfo): ArticleResponse {
+        return ArticleResponse(articleService.modifyArticle(articleDTO.createEntity(), authInfo.email, id))
     }
 
     /**
      * curl -X DELETE http://localhost:8080/article/1 -H "Content-Type: application/json" -d '{"email": "email@urssu.com", "password": "password"}'
      */
     @DeleteMapping("/article/{id}")
-    fun delete(@PathVariable id: Long, @RequestBody loginDTO: LoginDTO) {
-        articleService.deleteArticle(loginDTO.email, loginDTO.password, id)
+    fun delete(@PathVariable id: Long, @Auth authInfo: AuthInfo) {
+        articleService.deleteArticle(authInfo.email, id)
     }
 
 }

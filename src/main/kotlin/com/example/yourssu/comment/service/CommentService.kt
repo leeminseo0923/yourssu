@@ -17,9 +17,8 @@ class CommentService @Autowired constructor(
     private val userService: UserService
 ) {
 
-    fun createComment(comment: Comment, email: String, userPassword: String, articleId: Long): Comment {
+    fun createComment(comment: Comment, email: String, articleId: Long): Comment {
         val user: User = userService.getUser(email)
-        userService.validateUser(email, userPassword)
         val article = articleService.getArticleById(articleId)
         comment.article = article
         comment.user = user
@@ -30,14 +29,12 @@ class CommentService @Autowired constructor(
     fun modifyComment(
         comment: Comment,
         email: String,
-        userPassword: String,
         articleId: Long,
         commentId: Long
     ): Comment {
 
         commentRepository.findById(commentId).ifPresentOrElse({
             val user: User = userService.getUser(email)
-            userService.validateUser(email, userPassword)
 
             if (it.user != user) {
                 throw PermissionDeniedError()
@@ -54,12 +51,10 @@ class CommentService @Autowired constructor(
     }
 
 
-    fun deleteComment(articleId: Long, commentId: Long, email: String, userPassword: String) {
+    fun deleteComment(articleId: Long, commentId: Long, email: String) {
         commentRepository.findById(commentId).ifPresent {
             val user = userService.getUser(email)
             if(user != it.user) throw PermissionDeniedError()
-
-            userService.validateUser(email, userPassword)
 
             if (articleId == it.article.articleId)
                 commentRepository.deleteById(commentId)

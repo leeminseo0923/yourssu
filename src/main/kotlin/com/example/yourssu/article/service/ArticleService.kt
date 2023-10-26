@@ -21,25 +21,24 @@ class ArticleService (
     private val commentRepository: CommentRepository
 ) {
 
-    fun createArticle(article: Article, userEmail: String, userPassword: String): Article {
+    fun createArticle(article: Article, userEmail: String): Article {
         userRepository.findByEmail(userEmail).ifPresentOrElse({
-            if (!passwordEncoder.matches(userPassword, it.password)) throw WrongPasswordException()
             article.user = it
         }, {
             throw UserNotFoundException()
         })
 
-
         return articleRepository.save(article)
     }
 
-    fun modifyArticle(article: Article, userEmail: String, userPassword: String, articleId: Long): Article {
+    fun modifyArticle(article: Article, userEmail: String, articleId: Long): Article {
         articleRepository.findById(articleId).ifPresentOrElse({ oldArticle ->
             userRepository.findByEmail(userEmail).ifPresentOrElse({
+
                 if (it != oldArticle.user) {
                     throw PermissionDeniedError()
                 }
-                passwordEncoder.matches(userPassword, it.password)
+
             }, {
                 throw UserNotFoundException()
             })
@@ -55,11 +54,10 @@ class ArticleService (
     }
 
     @Transactional
-    fun deleteArticle(userEmail: String, userPassword: String, articleId: Long) {
+    fun deleteArticle(userEmail: String, articleId: Long) {
         articleRepository.findById(articleId).ifPresent {
             userRepository.findByEmail(userEmail).ifPresentOrElse({ user ->
                 if (it.user != user) throw PermissionDeniedError()
-                passwordEncoder.matches(userPassword, user.password)
 
             }, { throw UserNotFoundException() })
 
