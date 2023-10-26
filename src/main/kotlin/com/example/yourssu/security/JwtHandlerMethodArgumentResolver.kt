@@ -22,9 +22,7 @@ class JwtHandlerMethodArgumentResolver(
         webRequest: NativeWebRequest,
         binderFactory: WebDataBinderFactory?
     ): Any? {
-        val token = webRequest.getHeader("Authorization")
-
-        println(">>>>$token")
+        val token = webRequest.getHeader("Authorization")?.substring(7)
 
 
         if (token != null) {

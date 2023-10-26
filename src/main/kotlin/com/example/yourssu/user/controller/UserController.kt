@@ -5,6 +5,8 @@ import com.example.yourssu.security.AuthInfo
 import com.example.yourssu.user.domain.User
 import com.example.yourssu.user.dto.LoginDTO
 import com.example.yourssu.user.service.UserService
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -31,7 +33,8 @@ class UserController @Autowired constructor(private val userService: UserService
      * curl -X DELETE http://localhost:8080/user -H "Content-Type: application/json" -d '{"email": "email1@urssu.com", "password": "password1"}'
      */
     @DeleteMapping("/user")
-    fun delete(@RequestBody user: LoginDTO, @Auth authInfo: AuthInfo) {
+    @SecurityRequirement(name = "JWT auth")
+    fun delete(@RequestBody user: LoginDTO, @Parameter(hidden = true)@Auth authInfo: AuthInfo) {
         userService.deleteUser(authInfo.email, user.password)
     }
 

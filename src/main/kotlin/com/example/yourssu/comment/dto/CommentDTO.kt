@@ -3,7 +3,6 @@ package com.example.yourssu.comment.dto
 import com.example.yourssu.comment.domain.Comment
 
 data class CommentDTO(
-    val email: String,
     val content: String
 ) {
     fun createEntity(): Comment {
