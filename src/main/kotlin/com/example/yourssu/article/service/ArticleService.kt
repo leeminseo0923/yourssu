@@ -8,8 +8,6 @@ import com.example.yourssu.error.PermissionDeniedError
 import com.example.yourssu.user.domain.User
 import com.example.yourssu.user.exception.UserNotFoundException
 import com.example.yourssu.user.repository.UserRepository
-import com.example.yourssu.user.exception.WrongPasswordException
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
@@ -17,7 +15,6 @@ import javax.transaction.Transactional
 class ArticleService (
     private val articleRepository: ArticleRepository,
     private val userRepository: UserRepository,
-    private val passwordEncoder: PasswordEncoder,
     private val commentRepository: CommentRepository
 ) {
 
