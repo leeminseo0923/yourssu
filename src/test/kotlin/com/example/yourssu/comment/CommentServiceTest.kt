@@ -270,6 +270,6 @@ class CommentServiceTest @Autowired constructor(
         val findById = commentRepository.findById(comment.commentId)
 
         assertThat(findById)
-            .isPresent
+                .isPresent
     }
 }

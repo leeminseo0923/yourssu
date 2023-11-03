@@ -4,6 +4,7 @@ import com.example.yourssu.user.domain.User
 import com.example.yourssu.user.exception.UserNotFoundException
 import com.example.yourssu.user.exception.WrongPasswordException
 import com.example.yourssu.user.repository.UserRepository
+import com.example.yourssu.user.response.RegisterResponse
 import com.example.yourssu.user.service.UserService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -35,7 +36,7 @@ class UserServiceTest {
         val createUser = userService.createUser(user)
         //then
         assertThat(createUser)
-            .isEqualTo(user)
+            .isEqualTo(RegisterResponse(user.email, user.username, "USER"))
     }
 
     @Test
@@ -78,7 +79,7 @@ class UserServiceTest {
     @Test
     fun failToGetUserIfNotExist() {
         //given
-        val email: String = "temp@abc.com"
+        val email = "temp@abc.com"
         //when
         val userNotFoundException = assertThrows<UserNotFoundException> {
             userService.getUser(email)
@@ -95,8 +96,9 @@ class UserServiceTest {
         val user = User("temp@abc.com", password, "홍길동Ab")
         user.password = passwordEncoder.encode(password)
         //when
-        userService.validateUser(user.email, password)
+        userRepository.save(user)
         //then
+        userService.validateUser(user.email, password)
     }
 
     @Test
