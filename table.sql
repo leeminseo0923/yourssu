@@ -1,4 +1,3 @@
-create database yourssu;
 use yourssu;
 
 create table user
