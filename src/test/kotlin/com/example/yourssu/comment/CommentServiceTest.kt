@@ -10,7 +10,6 @@ import com.example.yourssu.comment.exception.CommentNotFoundException
 import com.example.yourssu.user.domain.User
 import com.example.yourssu.user.exception.UserNotFoundException
 import com.example.yourssu.user.repository.UserRepository
-import com.example.yourssu.user.exception.WrongPasswordException
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -48,7 +47,7 @@ class CommentServiceTest @Autowired constructor(
 
         val comment = Comment(content)
         //when
-        val createComment = commentService.createComment(comment, email, password, article.articleId)
+        val createComment = commentService.createComment(comment, email, article.articleId)
         //then
         assertThat(createComment)
             .isEqualTo(comment)
@@ -69,7 +68,7 @@ class CommentServiceTest @Autowired constructor(
 
         //when
         val assertThrows = assertThrows<ArticleNotFoundException> {
-            commentService.createComment(comment, email, password, 0)
+            commentService.createComment(comment, email, 0)
         }
         val findById: Optional<Comment> = commentRepository.findById(comment.commentId)
         //then
@@ -102,7 +101,6 @@ class CommentServiceTest @Autowired constructor(
             commentService.createComment(
                 comment,
                 unknownUserEmail,
-                password,
                 article.articleId
             )
         }
@@ -111,37 +109,6 @@ class CommentServiceTest @Autowired constructor(
             .isEqualTo("User Not Found")
     }
 
-    @Test
-    fun createCommentFailIfWrongPassword() {
-        //given
-        val email = "temp@abc.com"
-        val password = "temp@!1"
-        val username = "홍길동Ab"
-        val encodedPasswd = passwordEncoder.encode(password)
-        val user = User(email, encodedPasswd, username)
-        userRepository.save(user)
-
-        val title = "title"
-        val content = "content"
-        val article = Article(title, content)
-        article.user = user
-        articleRepository.save(article)
-
-        val comment = Comment(content)
-        val wrongPassword = "1234"
-        //when
-        val assertThrows = assertThrows<WrongPasswordException> {
-            commentService.createComment(
-                comment,
-                email,
-                wrongPassword,
-                article.articleId
-            )
-        }
-        //then
-        assertThat(assertThrows.message)
-            .isEqualTo("Password is wrong")
-    }
 
     @Test
     fun modifyCommentSuccess() {
@@ -167,7 +134,7 @@ class CommentServiceTest @Autowired constructor(
         comment.content = "content1"
 
         //when
-        commentService.modifyComment(comment, email, password, article.articleId, comment.commentId)
+        commentService.modifyComment(comment, email, article.articleId, comment.commentId)
         //then
         val findById = commentRepository.findById(comment.commentId)
 
@@ -199,7 +166,7 @@ class CommentServiceTest @Autowired constructor(
 
         //when
         val assertThrows = assertThrows<CommentNotFoundException> {
-            commentService.modifyComment(comment, email, password, article.articleId, 1)
+            commentService.modifyComment(comment, email, article.articleId, 1)
         }
         //then
         assertThat(assertThrows.message)
@@ -234,7 +201,6 @@ class CommentServiceTest @Autowired constructor(
             commentService.modifyComment(
                 comment,
                 email,
-                password,
                 0,
                 comment.commentId
             )
@@ -268,7 +234,7 @@ class CommentServiceTest @Autowired constructor(
 
 
         //when
-        commentService.deleteComment(article.articleId, comment.commentId, email, password)
+        commentService.deleteComment(article.articleId, comment.commentId, email)
         //then
         val findById = commentRepository.findById(comment.commentId)
 
@@ -299,7 +265,7 @@ class CommentServiceTest @Autowired constructor(
 
 
         //when
-        commentService.deleteComment(1, comment.commentId, email, password)
+        commentService.deleteComment(1, comment.commentId, email)
         //then
         val findById = commentRepository.findById(comment.commentId)
 
