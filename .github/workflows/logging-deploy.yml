@@ -3,6 +3,9 @@ name: logging-system
 on:
   workflow_dispatch:
 
+env:
+  S3_BUCKET_NAME: yourssuincubating
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -30,3 +33,16 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew bootJar
         shell: bash
+
+      - name: Make zip file
+        run: zip -r ./$GITHUB_SHA.zip .
+        shell: bash
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-east-2
+          role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
+
+      - name: Upload to S3
+        run: aws s3 cp --region us-east-2 ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip
