@@ -11,9 +11,8 @@ jobs:
         uses: actions/checkout/@v3
 
       - name: copy secret to application.properties
-        run: |
-          echo ${{ secrets.APPLICATION_DEV_PROPERTIES }} > ./src/main/resources/application-dev.properties
-          cat ./src/main/resources/application-dev.properties
+      - run: echo ${{ secrets.APPLICATION_DEV_PROPERTIES }} > ./src/main/resources/application-dev.properties
+      - run: cat ./src/main/resources/application-dev.properties
 
       - name: Set up JDK 1.8
         uses: actions/setup-java@v3
