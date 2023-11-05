@@ -16,15 +16,6 @@ jobs:
           java-version: 17
           distribution: liberica
 
-      - name: Setup MYSQL
-        uses: mirromutth/mysql-action@v1.1
-        with:
-          host port: 3306
-          container port: 3306
-          mysql root password: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-          mysql database: ${{ secrets.MYSQL_DATABASE }}
-          
-
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
         shell: bash
