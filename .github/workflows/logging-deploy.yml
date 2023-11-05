@@ -10,18 +10,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout/@v3
 
+      - name: copy secret to application.properties
+        run: |
+          echo ${{ secrets.APPLICATION_DEV_PROPERTIES }} > ./src/main/resources/application-dev.properties
+          cat ./src/main/resources/application-dev.properties
+
       - name: Set up JDK 1.8
         uses: actions/setup-java@v3
         with:
           java-version: 17
           distribution: liberica
-
-      - name: Copy Secret
-        env:
-          CREATE_SECRET: ${{secrets.APPLICATION_DEV_PROPERTIES}}
-          CREATE_SECRET_DIR: src/main/resources
-          CREATE_SECRET_DIR_FILE_NAME: application-dev.properties
-        run: echo $CREATE_SECRET > $CREATE_SECRET_DIR/$CREATE_SECRET_DIR_FILE_NAME
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
