@@ -4,6 +4,7 @@ import com.example.yourssu.security.Auth
 import com.example.yourssu.security.AuthInfo
 import com.example.yourssu.user.domain.User
 import com.example.yourssu.user.dto.LoginDTO
+import com.example.yourssu.user.dto.RegisterDTO
 import com.example.yourssu.user.service.UserService
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
@@ -24,7 +25,8 @@ class UserController @Autowired constructor(private val userService: UserService
      * curl -X POST http://localhost:8080/user -H "Content-Type: application/json" -d '{"email": "email1@urssu.com", "password": "password", "username": "username", "role": "USER"}'
      */
     @PostMapping("/user")
-    fun create(@RequestBody user: User): ResponseEntity<Any?> {
+    fun create(@RequestBody userDTO: RegisterDTO): ResponseEntity<Any?> {
+        val user = User(userDTO.email, userDTO.password, userDTO.username, userDTO.role)
         return ResponseEntity(userService.createUser(user), HttpStatus.CREATED)
     }
 

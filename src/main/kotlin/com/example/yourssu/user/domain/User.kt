@@ -38,10 +38,12 @@ class User() {
     @Column
     var refreshToken: String = ""
 
-    constructor(email: String, password: String, username: String) : this() {
+    constructor(email: String, password: String, username: String, userRole: String) : this() {
         this.email = email
         this.password = password
         this.username = username
+        if (userRole == "USER") this.role = UserRole.USER
+        if (userRole == "ADMIN") this.role = UserRole.ADMIN
     }
 
     override fun equals(other: Any?): Boolean {
