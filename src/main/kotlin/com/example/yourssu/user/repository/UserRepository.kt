@@ -4,6 +4,6 @@ import com.example.yourssu.user.domain.User
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 
-interface UserRepository : JpaRepository<User, Long> {
+interface UserRepository : JpaRepository<User, Long>, UserRepositoryCustom {
     fun findByEmail(email: String): Optional<User>
 }

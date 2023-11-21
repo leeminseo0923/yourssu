@@ -16,8 +16,6 @@ class SecurityConfig(
     val jwtProvider: JwtProvider
 ) {
 
-
-
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http
@@ -26,6 +24,7 @@ class SecurityConfig(
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
+            .antMatchers("/user/show/**").hasRole("ADMIN")
             .anyRequest().permitAll()
             .and()
             .addFilterBefore(JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter::class.java)

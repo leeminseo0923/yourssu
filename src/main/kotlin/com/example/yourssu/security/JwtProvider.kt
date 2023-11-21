@@ -50,14 +50,11 @@ class JwtProvider (
     }
 
     fun validateToken(token: String): Boolean {
-        try {
-            if (!token.substring(0, "BEARER".length).equals("BEARER ", ignoreCase = true)) {
-                return false
-            }
-            val claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token.split(" ")[1].trim())
-            return !claims.body.expiration.before(Date())
+        return try {
+            val claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token)
+            !claims.body.expiration.before(Date())
         } catch (e: Exception) {
-            return false
+            false
         }
     }
 

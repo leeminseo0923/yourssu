@@ -1,16 +1,18 @@
 package com.example.yourssu.user.service
 
-import com.example.yourssu.security.JwtProvider
 import com.example.yourssu.article.service.ArticleService
 import com.example.yourssu.comment.repository.CommentRepository
+import com.example.yourssu.security.JwtProvider
 import com.example.yourssu.user.domain.User
 import com.example.yourssu.user.exception.UserNotFoundException
 import com.example.yourssu.user.exception.WrongPasswordException
 import com.example.yourssu.user.repository.UserRepository
 import com.example.yourssu.user.response.LoginResponse
 import com.example.yourssu.user.response.RegisterResponse
+import com.example.yourssu.user.response.UserResponse
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 import javax.transaction.Transactional
 
 @Service
@@ -47,9 +49,8 @@ class UserService(
         }, { throw UserNotFoundException() })
     }
 
-    fun getUser(email: String): User {
+    fun getUserByEmail(email: String): User {
         return userRepository.findByEmail(email).orElseThrow { throw UserNotFoundException() }
-
     }
 
     /**
@@ -72,7 +73,7 @@ class UserService(
     fun loginUser(email: String, password: String): LoginResponse {
 
         validateUser(email, password)
-        val user = getUser(email)
+        val user = getUserByEmail(email)
 
         val accessToken = jwtProvider.createToken(email, user.role, JwtProvider.ExpirationTime.ACCESS)
         val refreshToken = jwtProvider.createToken(email, user.role, JwtProvider.ExpirationTime.REFRESH)
@@ -80,5 +81,19 @@ class UserService(
         user.refreshToken = refreshToken
         userRepository.save(user)
         return LoginResponse(user, accessToken)
+    }
+
+    fun getAllUser(
+        username: String,
+        email: String,
+        createdAtStart: LocalDateTime,
+        createdAtEnd: LocalDateTime,
+        updatedAtStart: LocalDateTime,
+        updatedAtEnd: LocalDateTime
+    ) : List<UserResponse> {
+        val users =
+            userRepository.searchAll(username, email, createdAtStart, createdAtEnd, updatedAtStart, updatedAtEnd)
+
+        return users
     }
 }

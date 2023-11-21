@@ -1,6 +1,5 @@
 package com.example.yourssu.user.domain
 
-import com.example.yourssu.user.domain.User
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
@@ -8,12 +7,9 @@ import java.util.stream.Collectors
 
 class UserDetailsImpl(private val user: User): UserDetails {
 
-    fun getUser(): User {
-        return user;
-    }
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        return listOf(user.role.name).stream().map { SimpleGrantedAuthority(it) }.collect(Collectors.toList())
+        return listOf("ROLE_"+user.role.name).stream().map { SimpleGrantedAuthority(it) }.collect(Collectors.toList())
     }
 
     override fun getPassword(): String {
