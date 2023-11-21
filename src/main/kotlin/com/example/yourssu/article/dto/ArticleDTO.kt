@@ -4,7 +4,7 @@ import com.example.yourssu.article.domain.Article
 
 data class ArticleDTO(
     val title: String,
-    val content: String
+    val content: String,
 ) {
     fun createEntity(): Article {
         if (title == "" || title == " " || content == "" || content == " ") {

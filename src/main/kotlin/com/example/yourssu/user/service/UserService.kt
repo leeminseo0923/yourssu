@@ -21,16 +21,14 @@ class UserService(
     private val passwordEncoder: PasswordEncoder,
     private val commentRepository: CommentRepository,
     private val articleService: ArticleService,
-    private val jwtProvider: JwtProvider
+    private val jwtProvider: JwtProvider,
 ) {
-
-
     fun createUser(user: User): RegisterResponse {
         val requestEmail: String = user.email
 
-        if (userRepository.findByEmail(requestEmail).isPresent)
+        if (userRepository.findByEmail(requestEmail).isPresent) {
             throw IllegalArgumentException("User is already created")
-
+        }
 
         user.password = passwordEncoder.encode(user.password)
 
@@ -39,7 +37,10 @@ class UserService(
     }
 
     @Transactional
-    fun deleteUser(email: String, userPassword: String) {
+    fun deleteUser(
+        email: String,
+        userPassword: String,
+    ) {
         userRepository.findByEmail(email).ifPresentOrElse({
             validateUser(email, userPassword)
 
@@ -61,17 +62,23 @@ class UserService(
      * @exception UserNotFoundException If user doesn't exist
      * @exception WrongPasswordException If password is wrong
      */
-    fun validateUser(email: String, password: String) {
-
-        val user = userRepository.findByEmail(email).orElseThrow {
-            throw UserNotFoundException()
-        }
-        if (!passwordEncoder.matches(password, user.password))
+    fun validateUser(
+        email: String,
+        password: String,
+    ) {
+        val user =
+            userRepository.findByEmail(email).orElseThrow {
+                throw UserNotFoundException()
+            }
+        if (!passwordEncoder.matches(password, user.password)) {
             throw WrongPasswordException()
+        }
     }
 
-    fun loginUser(email: String, password: String): LoginResponse {
-
+    fun loginUser(
+        email: String,
+        password: String,
+    ): LoginResponse {
         validateUser(email, password)
         val user = getUserByEmail(email)
 
@@ -89,8 +96,8 @@ class UserService(
         createdAtStart: LocalDateTime,
         createdAtEnd: LocalDateTime,
         updatedAtStart: LocalDateTime,
-        updatedAtEnd: LocalDateTime
-    ) : List<UserResponse> {
+        updatedAtEnd: LocalDateTime,
+    ): List<UserResponse> {
         val users =
             userRepository.searchAll(username, email, createdAtStart, createdAtEnd, updatedAtStart, updatedAtEnd)
 

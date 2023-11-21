@@ -1,9 +1,9 @@
 package com.example.yourssu.article.service
 
 import com.example.yourssu.article.domain.Article
-import com.example.yourssu.comment.repository.CommentRepository
 import com.example.yourssu.article.exception.ArticleNotFoundException
 import com.example.yourssu.article.repository.ArticleRepository
+import com.example.yourssu.comment.repository.CommentRepository
 import com.example.yourssu.error.PermissionDeniedError
 import com.example.yourssu.user.domain.User
 import com.example.yourssu.user.exception.UserNotFoundException
@@ -12,13 +12,15 @@ import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
 @Service
-class ArticleService (
+class ArticleService(
     private val articleRepository: ArticleRepository,
     private val userRepository: UserRepository,
-    private val commentRepository: CommentRepository
+    private val commentRepository: CommentRepository,
 ) {
-
-    fun createArticle(article: Article, userEmail: String): Article {
+    fun createArticle(
+        article: Article,
+        userEmail: String,
+    ): Article {
         userRepository.findByEmail(userEmail).ifPresentOrElse({
             article.user = it
         }, {
@@ -28,14 +30,16 @@ class ArticleService (
         return articleRepository.save(article)
     }
 
-    fun modifyArticle(article: Article, userEmail: String, articleId: Long): Article {
+    fun modifyArticle(
+        article: Article,
+        userEmail: String,
+        articleId: Long,
+    ): Article {
         articleRepository.findById(articleId).ifPresentOrElse({ oldArticle ->
             userRepository.findByEmail(userEmail).ifPresentOrElse({
-
                 if (it != oldArticle.user) {
                     throw PermissionDeniedError()
                 }
-
             }, {
                 throw UserNotFoundException()
             })
@@ -51,11 +55,13 @@ class ArticleService (
     }
 
     @Transactional
-    fun deleteArticle(userEmail: String, articleId: Long) {
+    fun deleteArticle(
+        userEmail: String,
+        articleId: Long,
+    ) {
         articleRepository.findById(articleId).ifPresent {
             userRepository.findByEmail(userEmail).ifPresentOrElse({ user ->
                 if (it.user != user) throw PermissionDeniedError()
-
             }, { throw UserNotFoundException() })
 
             commentRepository.deleteAllByArticle(it)
@@ -71,7 +77,6 @@ class ArticleService (
             articleRepository.delete(it)
         }
     }
-
 
     fun getArticleById(id: Long): Article {
         return articleRepository.findById(id).orElseThrow { throw ArticleNotFoundException() }

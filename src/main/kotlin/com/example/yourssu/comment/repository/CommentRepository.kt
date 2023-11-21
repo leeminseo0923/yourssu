@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface CommentRepository: JpaRepository<Comment, Long> {
+interface CommentRepository : JpaRepository<Comment, Long> {
     fun deleteAllByArticle(article: Article)
-    fun deleteAllByUser(user: User)
 
+    fun deleteAllByUser(user: User)
 }

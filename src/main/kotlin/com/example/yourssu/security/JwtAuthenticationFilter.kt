@@ -8,9 +8,8 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 class JwtAuthenticationFilter(
-    private val jwtProvider: JwtProvider
-): OncePerRequestFilter() {
-
+    private val jwtProvider: JwtProvider,
+) : OncePerRequestFilter() {
     private val ignoringPaths = arrayOf("/user", "/user/login")
 
     override fun shouldNotFilter(request: HttpServletRequest): Boolean {
@@ -26,10 +25,9 @@ class JwtAuthenticationFilter(
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        filterChain: FilterChain
+        filterChain: FilterChain,
     ) {
         val token: String? = jwtProvider.resolveToken(request)
-
 
         if (token?.let { jwtProvider.validateToken(it) } == true) {
             val authentication = jwtProvider.getAuthentication(token)

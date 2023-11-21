@@ -13,19 +13,22 @@ import javax.crypto.SecretKey
 import javax.servlet.http.HttpServletRequest
 
 @Component
-class JwtProvider (
+class JwtProvider(
     val userDetailsService: UserDetailsService,
-    key: JWTKey
+    key: JWTKey,
 ) {
-
     enum class ExpirationTime(val number: Long) {
-        REFRESH(1000*60*60L),
-        ACCESS(1000*60*30L)
+        REFRESH(1000 * 60 * 60L),
+        ACCESS(1000 * 60 * 30L),
     }
 
     val key: SecretKey = Keys.hmacShaKeyFor(key.key.toByteArray())
 
-    fun createToken(email: String, role: UserRole, expirationTime: ExpirationTime): String {
+    fun createToken(
+        email: String,
+        role: UserRole,
+        expirationTime: ExpirationTime,
+    ): String {
         val claims = Jwts.claims()
         claims.subject = email
         claims["roles"] = role.name
@@ -38,13 +41,16 @@ class JwtProvider (
             .signWith(key, SignatureAlgorithm.HS256)
             .compact()
     }
+
     fun getAuthentication(token: String): Authentication {
         val userDetails = userDetailsService.loadUserByUsername(getAccount(token))
         return UsernamePasswordAuthenticationToken(userDetails, "", userDetails.authorities)
     }
+
     fun getAccount(token: String): String {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).body.subject
     }
+
     fun resolveToken(request: HttpServletRequest): String? {
         return request.getHeader("Authorization")?.substring(7)
     }
@@ -57,7 +63,4 @@ class JwtProvider (
             false
         }
     }
-
-
-
 }

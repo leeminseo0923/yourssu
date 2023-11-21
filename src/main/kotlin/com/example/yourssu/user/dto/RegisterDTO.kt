@@ -4,5 +4,5 @@ data class RegisterDTO(
     val email: String,
     val password: String,
     val username: String,
-    val role: String
+    val role: String,
 )

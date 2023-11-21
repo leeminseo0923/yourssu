@@ -9,7 +9,7 @@ import org.springframework.web.method.support.ModelAndViewContainer
 
 @Component
 class JwtHandlerMethodArgumentResolver(
-    val jwtProvider: JwtProvider
+    val jwtProvider: JwtProvider,
 ) : HandlerMethodArgumentResolver {
     override fun supportsParameter(parameter: MethodParameter): Boolean {
         println(parameter.hasParameterAnnotation(Auth::class.java))
@@ -20,10 +20,9 @@ class JwtHandlerMethodArgumentResolver(
         parameter: MethodParameter,
         mavContainer: ModelAndViewContainer?,
         webRequest: NativeWebRequest,
-        binderFactory: WebDataBinderFactory?
+        binderFactory: WebDataBinderFactory?,
     ): Any? {
         val token = webRequest.getHeader("Authorization")?.substring(7)
-
 
         if (token != null) {
             val email = jwtProvider.getAccount(token)
@@ -31,6 +30,5 @@ class JwtHandlerMethodArgumentResolver(
         }
 
         return null
-
     }
 }
