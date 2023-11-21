@@ -9,12 +9,11 @@ import com.example.yourssu.user.service.UserService
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
+import java.time.LocalDate
 
 @RestController
 class UserController @Autowired constructor(private val userService: UserService) {
@@ -36,7 +35,7 @@ class UserController @Autowired constructor(private val userService: UserService
      */
     @DeleteMapping("/user")
     @SecurityRequirement(name = "JWT auth")
-    fun delete(@RequestBody user: LoginDTO, @Parameter(hidden = true)@Auth authInfo: AuthInfo) {
+    fun delete(@RequestBody user: LoginDTO, @Parameter(hidden = true) @Auth authInfo: AuthInfo) {
         userService.deleteUser(authInfo.email, user.password)
     }
 
@@ -46,5 +45,29 @@ class UserController @Autowired constructor(private val userService: UserService
     @PostMapping("/user/login")
     fun login(@RequestBody user: LoginDTO): ResponseEntity<Any?> {
         return ResponseEntity(userService.loginUser(user.email, user.password), HttpStatus.OK)
+    }
+
+    @GetMapping("/user/show")
+    @SecurityRequirement(name = "JWT auth")
+    fun all(
+        @RequestParam(defaultValue = "") email: String,
+        @RequestParam(defaultValue = "") username: String,
+        @RequestParam(defaultValue = "1000-01-01") @DateTimeFormat(pattern = "yyyy-MM-dd") createdAtStart: LocalDate,
+        @RequestParam(defaultValue = "9999-12-31") @DateTimeFormat(pattern = "yyyy-MM-dd") createdAtEnd: LocalDate,
+        @RequestParam(defaultValue = "1000-01-01") @DateTimeFormat(pattern = "yyyy-MM-dd") updatedAtStart: LocalDate,
+        @RequestParam(defaultValue = "9999-12-31") @DateTimeFormat(pattern = "yyyy-MM-dd") updatedAtEnd: LocalDate,
+        @Parameter(hidden = true) @Auth authInfo: AuthInfo
+    ): ResponseEntity<List<Any?>> {
+
+        val users = userService.getAllUser(
+            username,
+            email,
+            createdAtStart.atStartOfDay(),
+            createdAtEnd.atStartOfDay(),
+            updatedAtStart.atStartOfDay(),
+            updatedAtEnd.atStartOfDay()
+        )
+
+        return ResponseEntity(users, HttpStatus.OK)
     }
 }

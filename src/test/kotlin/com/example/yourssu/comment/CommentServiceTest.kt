@@ -29,6 +29,8 @@ class CommentServiceTest @Autowired constructor(
     val commentRepository: CommentRepository
 ) {
 
+    private val role = "USER"
+
     @Test
     fun createCommentSuccess() {
         //given
@@ -36,7 +38,7 @@ class CommentServiceTest @Autowired constructor(
         val password = "temp@!1"
         val username = "홍길동Ab"
         val encodedPasswd = passwordEncoder.encode(password)
-        val user = User(email, encodedPasswd, username)
+        val user = User(email, encodedPasswd, username, role)
         userRepository.save(user)
 
         val title = "title"
@@ -60,7 +62,7 @@ class CommentServiceTest @Autowired constructor(
         val password = "temp@!1"
         val username = "홍길동Ab"
         val encodedPasswd = passwordEncoder.encode(password)
-        val user = User(email, encodedPasswd, username)
+        val user = User(email, encodedPasswd, username, role)
         userRepository.save(user)
 
         val content = "content"
@@ -85,7 +87,7 @@ class CommentServiceTest @Autowired constructor(
         val password = "temp@!1"
         val username = "홍길동Ab"
         val encodedPasswd = passwordEncoder.encode(password)
-        val user = User(email, encodedPasswd, username)
+        val user = User(email, encodedPasswd, username, role)
         userRepository.save(user)
 
         val title = "title"
@@ -117,7 +119,7 @@ class CommentServiceTest @Autowired constructor(
         val password = "temp@!1"
         val username = "홍길동Ab"
         val encodedPasswd = passwordEncoder.encode(password)
-        val user = User(email, encodedPasswd, username)
+        val user = User(email, encodedPasswd, username, role)
         userRepository.save(user)
 
         val title = "title"
@@ -151,7 +153,7 @@ class CommentServiceTest @Autowired constructor(
         val password = "temp@!1"
         val username = "홍길동Ab"
         val encodedPasswd = passwordEncoder.encode(password)
-        val user = User(email, encodedPasswd, username)
+        val user = User(email, encodedPasswd, username, role)
         userRepository.save(user)
 
         val title = "title"
@@ -180,7 +182,7 @@ class CommentServiceTest @Autowired constructor(
         val password = "temp@!1"
         val username = "홍길동Ab"
         val encodedPasswd = passwordEncoder.encode(password)
-        val user = User(email, encodedPasswd, username)
+        val user = User(email, encodedPasswd, username, role)
         userRepository.save(user)
 
         val title = "title"
@@ -218,7 +220,7 @@ class CommentServiceTest @Autowired constructor(
         val password = "temp@!1"
         val username = "홍길동Ab"
         val encodedPasswd = passwordEncoder.encode(password)
-        val user = User(email, encodedPasswd, username)
+        val user = User(email, encodedPasswd, username, role)
         userRepository.save(user)
 
         val title = "title"
@@ -249,7 +251,7 @@ class CommentServiceTest @Autowired constructor(
         val password = "temp@!1"
         val username = "홍길동Ab"
         val encodedPasswd = passwordEncoder.encode(password)
-        val user = User(email, encodedPasswd, username)
+        val user = User(email, encodedPasswd, username, role)
         userRepository.save(user)
 
         val title = "title"

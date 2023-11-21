@@ -70,7 +70,7 @@ class UserServiceTest {
         val user = User(email = "temp@abc.com", password = "1234@!abc", username = "홍길동Ab", userRole="USER")
         userService.createUser(user)
         //when
-        val get = userService.getUser(user.email)
+        val get = userService.getUserByEmail(user.email)
         //then
         assertThat(get)
             .isEqualTo(user)
@@ -82,7 +82,7 @@ class UserServiceTest {
         val email = "temp@abc.com"
         //when
         val userNotFoundException = assertThrows<UserNotFoundException> {
-            userService.getUser(email)
+            userService.getUserByEmail(email)
         }
         //then
         assertThat(userNotFoundException.message)

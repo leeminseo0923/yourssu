@@ -32,7 +32,7 @@ class JwtAuthenticationFilter(
 
 
         if (token?.let { jwtProvider.validateToken(it) } == true) {
-            val authentication = jwtProvider.getAuthentication(token.split(" ")[1].trim())
+            val authentication = jwtProvider.getAuthentication(token)
             SecurityContextHolder.getContext().authentication = authentication
         }
 

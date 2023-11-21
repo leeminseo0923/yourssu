@@ -18,7 +18,7 @@ class CommentService @Autowired constructor(
 ) {
 
     fun createComment(comment: Comment, email: String, articleId: Long): Comment {
-        val user: User = userService.getUser(email)
+        val user: User = userService.getUserByEmail(email)
         val article = articleService.getArticleById(articleId)
         comment.article = article
         comment.user = user
@@ -34,7 +34,7 @@ class CommentService @Autowired constructor(
     ): Comment {
 
         commentRepository.findById(commentId).ifPresentOrElse({
-            val user: User = userService.getUser(email)
+            val user: User = userService.getUserByEmail(email)
 
             if (it.user != user) {
                 throw PermissionDeniedError()
@@ -53,7 +53,7 @@ class CommentService @Autowired constructor(
 
     fun deleteComment(articleId: Long, commentId: Long, email: String) {
         commentRepository.findById(commentId).ifPresent {
-            val user = userService.getUser(email)
+            val user = userService.getUserByEmail(email)
             if(user != it.user) throw PermissionDeniedError()
 
             if (articleId == it.article.articleId)
