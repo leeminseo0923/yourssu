@@ -12,16 +12,15 @@ import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.security.crypto.password.PasswordEncoder
-import java.lang.IllegalArgumentException
-import java.util.*
+import java.util.Optional
 import javax.transaction.Transactional
 
 @SpringBootTest
 @Transactional
 class UserServiceTest {
-
     @Autowired
     lateinit var userService: UserService
+
     @Autowired
     lateinit var passwordEncoder: PasswordEncoder
 
@@ -30,35 +29,36 @@ class UserServiceTest {
 
     @Test
     fun successToCreateNormalUser() {
-        //given
-        val user = User(email = "temp@abc.com", password = "1234@!abc", username = "홍길동Ab", userRole="USER")
-        //when
+        // given
+        val user = User(email = "temp@abc.com", password = "1234@!abc", username = "홍길동Ab", userRole = "USER")
+        // when
         val createUser = userService.createUser(user)
-        //then
+        // then
         assertThat(createUser)
             .isEqualTo(RegisterResponse(user.email, user.username, "USER"))
     }
 
     @Test
     fun failToCreateUserIfSameUserExist() {
-        //given
-        val user = User(email = "temp@abc.com", password = "1234@!abc", username = "홍길동Ab", userRole="USER")
+        // given
+        val user = User(email = "temp@abc.com", password = "1234@!abc", username = "홍길동Ab", userRole = "USER")
         userService.createUser(user)
-        //when
-        val assertThrows = assertThrows<IllegalArgumentException> {
-            userService.createUser(user)
-        }
-        //then
+        // when
+        val assertThrows =
+            assertThrows<IllegalArgumentException> {
+                userService.createUser(user)
+            }
+        // then
         assertThat(assertThrows.message)
             .isEqualTo("User is already created")
     }
 
     @Test
     fun userPasswordShouldBeEncoded() {
-        //given
+        // given
         val password = "1234@!abc"
-        val user = User(email = "temp@abc.com", password = password, username = "홍길동Ab", userRole="USER")
-        //when
+        val user = User(email = "temp@abc.com", password = password, username = "홍길동Ab", userRole = "USER")
+        // when
         userService.createUser(user)
         assertThat(passwordEncoder.matches(password, user.password))
             .isTrue()
@@ -66,65 +66,67 @@ class UserServiceTest {
 
     @Test
     fun getUserReturnUser() {
-        //given
-        val user = User(email = "temp@abc.com", password = "1234@!abc", username = "홍길동Ab", userRole="USER")
+        // given
+        val user = User(email = "temp@abc.com", password = "1234@!abc", username = "홍길동Ab", userRole = "USER")
         userService.createUser(user)
-        //when
+        // when
         val get = userService.getUserByEmail(user.email)
-        //then
+        // then
         assertThat(get)
             .isEqualTo(user)
     }
 
     @Test
     fun failToGetUserIfNotExist() {
-        //given
+        // given
         val email = "temp@abc.com"
-        //when
-        val userNotFoundException = assertThrows<UserNotFoundException> {
-            userService.getUserByEmail(email)
-        }
-        //then
+        // when
+        val userNotFoundException =
+            assertThrows<UserNotFoundException> {
+                userService.getUserByEmail(email)
+            }
+        // then
         assertThat(userNotFoundException.message)
             .isEqualTo("User Not Found")
     }
 
     @Test
     fun successValidatePassword() {
-        //given
+        // given
         val password = "1234@!abc"
         val user = User("temp@abc.com", password, "홍길동Ab", "USER")
         user.password = passwordEncoder.encode(password)
-        //when
+        // when
         userRepository.save(user)
-        //then
+        // then
         userService.validateUser(user.email, password)
     }
 
     @Test
     fun failValidatePassword() {
-        //given
+        // given
         val password1 = "1234@!abc"
         val password2 = "1234!@abc"
         val user = User("temp@abc.com", password1, "홍길동Ab", "USER")
         userService.createUser(user)
-        //when
-        val assertThrows = assertThrows<WrongPasswordException> {
-            userService.validateUser(user.email, password2)
-        }
-        //then
+        // when
+        val assertThrows =
+            assertThrows<WrongPasswordException> {
+                userService.validateUser(user.email, password2)
+            }
+        // then
         assertThat(assertThrows.message)
             .isEqualTo("Password is wrong")
     }
 
     @Test
     fun deleteUserIfUserExistAndPasswordEqual() {
-        //given
+        // given
         val user = User("temp@abc.com", passwordEncoder.encode("abc@123"), "홍길동Ab", "USER")
         userRepository.save(user)
-        //when
+        // when
         userService.deleteUser(user.email, "abc@123")
-        //then
+        // then
         val findById: Optional<User> = userRepository.findById(user.userId)
 
         assertThat(findById).isEmpty
@@ -132,30 +134,32 @@ class UserServiceTest {
 
     @Test
     fun deleteUserFailIfPasswordUnEqual() {
-        //given
+        // given
         val user = User("temp@abc.com", passwordEncoder.encode("abc@123"), "홍길동Ab", "USER")
         userRepository.save(user)
-        //when
-        val exception = assertThrows<WrongPasswordException> {
-            userService.deleteUser(user.email, user.password)
-        }
+        // when
+        val exception =
+            assertThrows<WrongPasswordException> {
+                userService.deleteUser(user.email, user.password)
+            }
         val findById: Optional<User> = userRepository.findById(user.userId)
-        //then
+        // then
         assertThat(exception.message).isEqualTo("Password is wrong")
         assertThat(findById).isPresent.isEqualTo(Optional.of(user))
     }
 
     @Test
     fun deleteUserFailIfUserNotExist() {
-        //given
+        // given
         val user = User("temp@abc.com", passwordEncoder.encode("abc@123"), "홍길동Ab", "USER")
         userRepository.save(user)
-        //when
-        val exception = assertThrows<UserNotFoundException> {
-            userService.deleteUser("not@abc.com", "1234")
-        }
+        // when
+        val exception =
+            assertThrows<UserNotFoundException> {
+                userService.deleteUser("not@abc.com", "1234")
+            }
         val findById: Optional<User> = userRepository.findById(user.userId)
-        //then
+        // then
         assertThat(exception.message).isEqualTo("User Not Found")
         assertThat(findById).isPresent.isEqualTo(Optional.of(user))
     }

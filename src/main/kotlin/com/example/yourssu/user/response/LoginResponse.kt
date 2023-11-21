@@ -7,7 +7,7 @@ data class LoginResponse(
     var username: String,
     var role: String,
     var accessToken: String,
-    var refreshToken: String
+    var refreshToken: String,
 ) {
     constructor(user: User, accessToken: String) : this(user.email, user.username, user.role.name, accessToken, user.refreshToken)
 }

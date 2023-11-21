@@ -6,9 +6,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Component
 class WebMvcConfig(
-    val jwtHandlerMethodArgumentResolver: JwtHandlerMethodArgumentResolver
+    val jwtHandlerMethodArgumentResolver: JwtHandlerMethodArgumentResolver,
 ) : WebMvcConfigurer {
-
     override fun addArgumentResolvers(resolvers: MutableList<HandlerMethodArgumentResolver>) {
         super.addArgumentResolvers(resolvers)
         resolvers.add(jwtHandlerMethodArgumentResolver)

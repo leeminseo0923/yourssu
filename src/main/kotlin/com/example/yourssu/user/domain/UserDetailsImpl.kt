@@ -5,11 +5,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import java.util.stream.Collectors
 
-class UserDetailsImpl(private val user: User): UserDetails {
-
-
+class UserDetailsImpl(private val user: User) : UserDetails {
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        return listOf("ROLE_"+user.role.name).stream().map { SimpleGrantedAuthority(it) }.collect(Collectors.toList())
+        return listOf("ROLE_" + user.role.name).stream().map { SimpleGrantedAuthority(it) }.collect(Collectors.toList())
     }
 
     override fun getPassword(): String {

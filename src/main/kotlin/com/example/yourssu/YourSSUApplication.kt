@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 @EnableJpaAuditing
 @ConfigurationPropertiesScan
 class YourSSUApplication
+
 fun main(args: Array<String>) {
     runApplication<YourSSUApplication>(*args)
 }

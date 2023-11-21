@@ -3,7 +3,7 @@ package com.example.yourssu.comment.dto
 import com.example.yourssu.comment.domain.Comment
 
 data class CommentDTO(
-    val content: String
+    val content: String,
 ) {
     fun createEntity(): Comment {
         if (content == "" || content == " ") {
